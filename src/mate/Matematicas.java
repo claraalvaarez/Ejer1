@@ -1,32 +1,29 @@
+package mate;
+
 /**
- * @autor Clara Alvarez
- * La clase Matematicas contiene métodos para realizar cálculos matemáticos.
+ * La clase Matematicas proporciona métodos estáticos para cálculos matemáticos.
  */
-package mates;
-
-import java.util.Random;
-
 public class Matematicas {
-
     /**
-     * Genera una aproximación al número pi mediante el método de Montecarlo.
+     * Calcula la integral de e^(x^2) utilizando el método de los rectángulos.
      *
-     * @param pasos el número de puntos generados
-     * @return una aproximación del número pi
+     * @param limInf el límite inferior de integración
+     * @param limSup el límite superior de integración
+     * @param h      el paso
+     * @return el resultado de la integral definida
      */
-    public static double generarNumeroPiIterativo(long pasos) {
-        Random random = new Random();
-        long puntosDentroCirculo = 0;
+    public static double integralEXCuadrado(double limInf, double limSup, double h) {
+        return integralEXCuadradoRecursivo(limInf, limSup, h, limInf);
+    }
 
-        for (long i = 0; i < pasos; i++) {
-            double x = random.nextDouble();
-            double y = random.nextDouble();
-
-            if (x * x + y * y <= 1) {
-                puntosDentroCirculo++;
-            }
+    private static double integralEXCuadradoRecursivo(double limInf, double limSup, double h, double current) {
+        if (current >= limSup) {
+            return 0; // Condición de terminación de la recursión
+        } else {
+            double f_x = Math.exp(current * current); // Calcular el valor de f(x) = e^(x^2) en el punto actual
+            double areaRectangulo = f_x * h; // Área del rectángulo en este punto
+            double areaRestante = integralEXCuadradoRecursivo(limInf, limSup, h, current + h); // Llamada recursiva para el siguiente punto
+            return areaRectangulo + areaRestante; // Suma del área de este rectángulo y las áreas restantes
         }
-
-        return 4.0 * puntosDentroCirculo / pasos;
     }
 }
